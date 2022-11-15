@@ -20,7 +20,8 @@ $app->addRoutingMiddleware();
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 //-- Step 4)
 // TODO: change the name of the sub directory here. You also need to change it in .htaccess
-$app->setBasePath("/Final-project-API"); #change this to subfolder if I need to change e.i. /.../music-api (has to match .htaccess)
+
+$app->setBasePath("/web-services-project/Final-Project-API"); #change this to subfolder if I need to change e.i. /.../music-api (has to match .htaccess)
 
 //-- Step 5) Include the files containing the definitions of the callbacks.
 require_once './includes/routes/fighter_routes.php';
@@ -28,9 +29,11 @@ require_once './includes/routes/fighter_routes.php';
 
 //-- Step 6)
 // TODO: And here we define app routes.
+
 $app->delete("/fighters/delete/{fighter_id}", "handleDeleteFighterById");
 $app->post("/fighters/create", "handleCreateFighters");
-$app->get("/fighters", "handleUpdateFighters");
+$app->get("/fighters", "handleGetAllFighters");
+
 
 $app->delete("/results/delete/{id}", "handleDeleteResultsById");
 $app->get("/results", "handleGetAllResults");
