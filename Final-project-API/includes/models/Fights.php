@@ -6,6 +6,7 @@ require_once("../database/connectionManager.php");
  */
 class FightsModel
 {
+  private $table_name = "fights";
   /**
    * The ID of the fight
    * @var string
@@ -25,7 +26,7 @@ class FightsModel
   public $fighter2;
 
   /**
-   * The odds of who winning the fight
+   * he odds of who winning the fight
    * @var string
    */
   public $odds;

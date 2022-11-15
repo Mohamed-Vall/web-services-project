@@ -33,13 +33,13 @@ class FinalResultsModel extends BaseModel {
      * @param int $result_id the id of the results.
      * @return array an array containing information about a given results.
      */
-    public function getResultById($result_id) {
+    public function getResultsById($result_id) {
         $sql = "SELECT * FROM finalresults WHERE resultID = ?";
         $data = $this->run($sql, [$result_id])->fetch();
         return $data;
     }
     
-    public function getResultByEventId($event_id){
+    public function getResultsByEventId($event_id){
         $sql = "SELECT * FROM finalresults WHERE eventID = ?";
         $data = $this->run($sql, [$event_id])->fetch();
         return $data;

@@ -2,7 +2,7 @@
 
 class FighterModel extends BaseModel {
 
-    private $table_name = "Fighter";
+    private $table_name = "fighters";
 
     /**
      * A model class for the `fighter` database table.
