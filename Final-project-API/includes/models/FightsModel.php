@@ -4,8 +4,8 @@ require_once("../database/connectionManager.php");
 /**
  *
  */
-class FightsModel
-{
+class FightsModel  extends BaseModel {
+
   private $table_name = "fights";
   /**
    * The ID of the fight
@@ -26,7 +26,7 @@ class FightsModel
   public $fighter2;
 
   /**
-   * he odds of who winning the fight
+   * The odds of who winning the fight
    * @var string
    */
   public $odds;
@@ -42,6 +42,7 @@ class FightsModel
 
   function __construct()
   {
+    parent::__construct();
     $this->connectionManager = new ConnectionManager();
     $this->dbConnection = $this->connectionManager->getConnection();
   }
