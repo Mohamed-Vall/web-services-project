@@ -39,4 +39,10 @@ class FighterModel extends BaseModel {
         $data = $this->run($sql, [":fighterid" => $fighter_id, ":name" => $name]);
         return $data;
     }
+
+    public function getFightersById($fighter_id) {
+        $sql = "SELECT * FROM fighters WHERE fighterId = ?";
+        $data = $this->rows($sql, [$fighter_id]);
+        return $data;
+      }
 }

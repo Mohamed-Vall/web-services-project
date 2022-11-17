@@ -45,10 +45,9 @@ class FinalResultsModel extends BaseModel {
         return $data;
     }
     
-    public function deleteResults($resultId){
-        $sql = "DELETE FROM finalresults WHERE resultID = ?";
-        $data = $this->run($sql, [$resultId])->fetch();
-        return $data;
+    public function deleteResults($resultID){
+        $sql = $this->run("DELETE FROM finalresults WHERE resultID = ?", [$resultID]);
+        return $sql->rowCount();
     }
 
 }

@@ -1,10 +1,10 @@
 <?php
-require_once("../database/connectionManager.php");
+//require_once("../database/connectionManager.php");
 
 /**
  *
  */
-class FightsModel  extends BaseModel {
+class FightsModel extends BaseModel {
 
   private $table_name = "fights";
   /**
@@ -43,11 +43,37 @@ class FightsModel  extends BaseModel {
   function __construct()
   {
     parent::__construct();
-    $this->connectionManager = new ConnectionManager();
-    $this->dbConnection = $this->connectionManager->getConnection();
+    //$this->connectionManager = new ConnectionManager();
+    //$this->dbConnection = $this->connectionManager->getConnection();
   }
 
-  function getAllFights()
+  /*public function getWhereLikeFights($artistName) {
+    $sql = "SELECT * FROM artist WHERE Name LIKE :name";
+    $data = $this->run($sql, [":name" => $artistName . "%"])->fetchAll();
+    return $data;
+  }*/
+
+/**
+ * Retrieve an artist by its id.
+ * @param int $artist_id the id of the artist.
+ * @return array an array containing information about a given artist.
+ */
+  public function getFightById($fight_id) {
+    $sql = "SELECT * FROM fights WHERE fightID = ?";
+    $data = $this->rows($sql, [$fight_id]);
+    return $data;
+  }
+
+  public function createFight($data) {
+    $data = $this->insert("fights", $data);
+    return $data;
+}
+
+public function deleteFightById($fight_id) {
+  $stmt = $this->run("DELETE FROM $this->table_name WHERE fightID = ?", [$fight_id]);
+  return $stmt->rowCount();
+}
+  /*function getAllFights()
   {
     $query = "SELECT * FROM fights";
 
@@ -56,9 +82,17 @@ class FightsModel  extends BaseModel {
     $statement->execute();
 
     return $statement->fetchAll(PDO::FETCH_ASSOC);
-  }
+  }*/
 
-  function getFightByID($fightid)
+  /*public function getAllFights() {
+    $sql = "SELECT * FROM fights";
+    $data = $this->rows($sql);
+    return $data;
+  }*/
+
+  
+
+  /*function getFightByID($fightid)
   {
     $query = "SELECT * FROM fights WHERE fightid = " . $fightid;
 
@@ -125,6 +159,6 @@ class FightsModel  extends BaseModel {
     $statement->execute(['schedule' => $schedule]);
 
     return $statement->fetch(PDO::FETCH_ASSOC);
-  }
+  }*/
 
 }
