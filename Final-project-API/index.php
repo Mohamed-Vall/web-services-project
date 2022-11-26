@@ -8,9 +8,13 @@ use Slim\Factory\AppFactory;
 require __DIR__ . '/vendor/autoload.php';
 require_once './includes/app_constants.php';
 require_once './includes/helpers/helper_functions.php';
+require_once './helpers/WebServiceInvoker.php';
+require_once './controllers/fightersController.php';
 
 //--Step 1) Instantiate App.
 $app = AppFactory::create();
+upcomingCompositeResource();
+//finishedCompositeResource();
 
 $app->addBodyParsingMiddleware();
 
@@ -53,3 +57,35 @@ $app->delete("/fights/delete/{fightsid}", "handleDeleteFightById");
 
 // Run the app.
 $app->run();
+
+function upcomingCompositeResource() {
+    $fighterEvent = Array();
+    // Get books data from the Ice and Fire API.
+    $event = new FightersController();
+    $fighters = $event->getBooksInfo();
+    // Get the list of artists.    
+    $event_model = new EventModel();        
+    $events = $event_model->getAll();
+
+    // Combine the data sets.
+    $fighterEvent["fighter"] = $fighters;
+    $fighterEvent["events"] = $events;
+    $jsonData = json_encode($fighterEvent, JSON_INVALID_UTF8_SUBSTITUTE);
+    echo $jsonData;
+}
+
+function finishedCompositeResource() {
+    $fighterEvent = Array();
+    // Get books data from the Ice and Fire API.
+    $event = null;//new IceAndFireController();
+    $fighters = $event->getBooksInfo();
+    // Get the list of artists.    
+    $event_model = new EventModel();        
+    $events = $event_model->getAll();
+    
+    // Combine the data sets.
+    $fighterEvent["fighter"] = $fighters;
+    $fighterEvent["events"] = $events;
+    $jsonData = json_encode($fighterEvent, JSON_INVALID_UTF8_SUBSTITUTE);
+    echo $jsonData;
+}
