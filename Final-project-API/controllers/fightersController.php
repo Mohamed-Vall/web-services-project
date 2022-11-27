@@ -68,3 +68,4 @@ class FightersController extends WebServiceInvoker {
         }
         return $events;
     }
+}
