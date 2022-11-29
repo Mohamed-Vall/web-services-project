@@ -1,10 +1,6 @@
 <?php
 
-/**
- * A wrapper class for invoking remote resources using the Guzzle HTTP library.
- *
- * @author Sleiman Rabah
- */
+
 class WebServiceInvoker {
 
     private $request_options;
@@ -16,6 +12,7 @@ class WebServiceInvoker {
     protected function invoke($resource_uri) {
         $data = Array();
         $client = new GuzzleHttp\Client();
+        //$client = new Client(['verify' => false]);
         $response = $client->get($resource_uri, $this->request_options);
         if ($response->getStatusCode() === 200) {
             $data = $response->getBody()->getContents();
