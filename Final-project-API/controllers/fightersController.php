@@ -15,9 +15,9 @@ class FightersController extends WebServiceInvoker {
      * 
      * @return array containing some information about books. 
      */
-    function getUpcomingInfo($id) {
+    function getUpcomingInfo() {   //Use Fights Table
         $events = Array();
-        $resource_uri = "https://api.sportsdata.io/v3/mma/stats/json/Fight/" + $id + "?key=a541ac55a76a48d1add34c4639da10ec";
+        $resource_uri = "https://localhost/web-services-project/Final-Project-API/fights";
         $eventsData = $this->invoke($resource_uri);
 
         if (!empty($eventsData)) {
@@ -29,12 +29,11 @@ class FightersController extends WebServiceInvoker {
             // Parse the list of books and retreive some  
             // of the contained information.
             foreach ($eventsData as $key => $event) {
-                $books[$index]["name"] = $book["name"];
-                $books[$index]["isbn"] = $book["isbn"];
-                $books[$index]["authors"] = $book["authors"];
-                $books[$index]["mediaType"] = $book["mediaType"];
-                $books[$index]["country"] = $book["country"];
-                $books[$index]["released"] = $book["released"];
+                $events[$index]["fightID"] = $event["fightID"];
+                $events[$index]["fighter1ID"] = $event["fighter1ID"];
+                $events[$index]["fighter2ID"] = $event["fighter2ID"];
+                $events[$index]["odds"] = $event["odds"];
+                $events[$index]["schedule"] = $event["schedule"];
                 //
                 $index++;
             }
@@ -42,9 +41,9 @@ class FightersController extends WebServiceInvoker {
         return $events;
     }
 
-    function getUpcomingInfo($id) {
+    function getFinishedInfo() {  //Use Events Table
         $events = Array();
-        $resource_uri = "https://api.sportsdata.io/v3/mma/scores/json/Event/" + $id + "?key=a541ac55a76a48d1add34c4639da10ec";
+        $resource_uri = "https://localhost/web-services-project/Final-Project-API/events";
         $eventsData = $this->invoke($resource_uri);
 
         if (!empty($eventsData)) {
@@ -56,12 +55,9 @@ class FightersController extends WebServiceInvoker {
             // Parse the list of books and retreive some  
             // of the contained information.
             foreach ($eventsData as $key => $event) {
-                $books[$index]["name"] = $book["name"];
-                $books[$index]["isbn"] = $book["isbn"];
-                $books[$index]["authors"] = $book["authors"];
-                $books[$index]["mediaType"] = $book["mediaType"];
-                $books[$index]["country"] = $book["country"];
-                $books[$index]["released"] = $book["released"];
+                $events[$index]["liveId"] = $event["liveId"];
+                $events[$index]["fightId"] = $event["fightId"];
+                $events[$index]["stats"] = $event["stats"];
                 //
                 $index++;
             }

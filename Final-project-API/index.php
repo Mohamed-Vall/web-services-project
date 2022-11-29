@@ -14,7 +14,7 @@ require_once './controllers/fightersController.php';
 //--Step 1) Instantiate App.
 $app = AppFactory::create();
 upcomingCompositeResource();
-//finishedCompositeResource();
+finishedCompositeResource();
 
 $app->addBodyParsingMiddleware();
 
@@ -41,7 +41,6 @@ $app->post("/fighters/create", "handleCreateFighters");
 $app->get("/fighters", "handleGetAllFighters");
 $app->get("/fighters/{fighter_id}", "handleGetFighterById");
 
-
 $app->delete("/results/delete/{resultID}", "handleDeleteResultsById");
 $app->get("/results", "handleGetAllResults");
 $app->get("/results/{resultID}", "handleGetResultsById");
@@ -51,9 +50,12 @@ $app->get("/events", "handleGetAllResults");
 $app->get("/events/{liveId}", "handleGetEventsById");
 $app->get("/events/fight/{fighterId}", "handleGetEventsByFighterId");
 
+$app->get("/fights", "handleGetFights");
 $app->get("/fights/{fightsid}", "handleGetfightById");
 $app->post("/fights/create", "handleCreatefight");
 $app->delete("/fights/delete/{fightsid}", "handleDeleteFightById");
+
+$app->get('/', ['verify' => true]);
 
 // Run the app.
 $app->run();
@@ -61,15 +63,15 @@ $app->run();
 function upcomingCompositeResource() {
     $fighterEvent = Array();
     // Get books data from the Ice and Fire API.
-    $event = new FightersController();
-    $fighters = $event->getBooksInfo();
+    $externalEvent = new FightersController();
+    $external = $externalEvent->getUpcomingInfo();
     // Get the list of artists.    
     $event_model = new EventModel();        
     $events = $event_model->getAll();
 
     // Combine the data sets.
-    $fighterEvent["fighter"] = $fighters;
-    $fighterEvent["events"] = $events;
+    $fighterEvent["external"] = $external;
+    $fighterEvent["internal"] = $events;
     $jsonData = json_encode($fighterEvent, JSON_INVALID_UTF8_SUBSTITUTE);
     echo $jsonData;
 }
@@ -77,15 +79,15 @@ function upcomingCompositeResource() {
 function finishedCompositeResource() {
     $fighterEvent = Array();
     // Get books data from the Ice and Fire API.
-    $event = null;//new IceAndFireController();
-    $fighters = $event->getBooksInfo();
+    $externalEvent = new FightersController();
+    $external = $externalEvent->getFinishedInfo();//$id);
     // Get the list of artists.    
     $event_model = new EventModel();        
     $events = $event_model->getAll();
-    
+
     // Combine the data sets.
-    $fighterEvent["fighter"] = $fighters;
-    $fighterEvent["events"] = $events;
+    $fighterEvent["external"] = $external;
+    $fighterEvent["internal"] = $events;
     $jsonData = json_encode($fighterEvent, JSON_INVALID_UTF8_SUBSTITUTE);
     echo $jsonData;
 }

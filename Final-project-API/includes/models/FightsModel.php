@@ -64,6 +64,12 @@ class FightsModel extends BaseModel {
     return $data;
   }
 
+  public function getAllFights() {
+    $sql = "SELECT * FROM fights";
+    $data = $this->rows($sql);
+    return $data;
+}
+
   public function createFight($data) {
     $data = $this->insert("fights", $data);
     return $data;
