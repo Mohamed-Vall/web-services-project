@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 require __DIR__ . '/vendor/autoload.php';
 require_once './includes/app_constants.php';
 require_once './includes/helpers/helper_functions.php';
+
 require_once './includes/models/BaseModel.php';
 require_once './includes/models/EventModel.php';
 require_once './includes/models/FightsModel.php';
@@ -15,8 +16,14 @@ require_once './includes/models/FinalResultsModel.php';
 
 $client = new GuzzleHttp\Client();
 
+require_once './helpers/WebServiceInvoker.php';
+require_once './controllers/fightersController.php';
+
+
 //--Step 1) Instantiate App.
 $app = AppFactory::create();
+upcomingCompositeResource();
+finishedCompositeResource();
 
 $app->addBodyParsingMiddleware();
 
@@ -38,7 +45,6 @@ require_once './includes/routes/fights_routes.php';
 //-- Step 6)
 // TODO: And here we define app routes.
 
-$uri_api = "https://api.sportsdata.io/v3/mma/scores/json/Fighters?key=a541ac55a76a48d1add34c4639da10ec";
 //-- Send the request.
 $response = $client->get($uri_api);
 
@@ -62,7 +68,6 @@ $app->post("/fighters/create", "handleCreateFighters");
 $app->get("/fighters", "handleGetAllFighters");
 $app->get("/fighters/{fighter_id}", "handleGetFighterById");
 
-
 $app->delete("/results/delete/{resultID}", "handleDeleteResultsById");
 $app->get("/results", "handleGetAllResults");
 $app->get("/results/{resultID}", "handleGetResultsById");
@@ -72,12 +77,44 @@ $app->get("/events", "handleGetAllResults");
 $app->get("/events/{liveId}", "handleGetEventsById");
 $app->get("/events/fight/{fighterId}", "handleGetEventsByFighterId");
 
+$app->get("/fights", "handleGetFights");
 $app->get("/fights/{fightsid}", "handleGetfightById");
 $app->post("/fights/create", "handleCreatefight");
 $app->delete("/fights/delete/{fightsid}", "handleDeleteFightById");
 
-
-
+$app->get('/', ['verify' => true]);
 
 // Run the app.
 $app->run();
+
+function upcomingCompositeResource() {
+    $fighterEvent = Array();
+    // Get books data from the Ice and Fire API.
+    $externalEvent = new FightersController();
+    $external = $externalEvent->getUpcomingInfo();
+    // Get the list of artists.    
+    $event_model = new EventModel();        
+    $events = $event_model->getAll();
+
+    // Combine the data sets.
+    $fighterEvent["external"] = $external;
+    $fighterEvent["internal"] = $events;
+    $jsonData = json_encode($fighterEvent, JSON_INVALID_UTF8_SUBSTITUTE);
+    echo $jsonData;
+}
+
+function finishedCompositeResource() {
+    $fighterEvent = Array();
+    // Get books data from the Ice and Fire API.
+    $externalEvent = new FightersController();
+    $external = $externalEvent->getFinishedInfo();//$id);
+    // Get the list of artists.    
+    $event_model = new EventModel();        
+    $events = $event_model->getAll();
+
+    // Combine the data sets.
+    $fighterEvent["external"] = $external;
+    $fighterEvent["internal"] = $events;
+    $jsonData = json_encode($fighterEvent, JSON_INVALID_UTF8_SUBSTITUTE);
+    echo $jsonData;
+}
