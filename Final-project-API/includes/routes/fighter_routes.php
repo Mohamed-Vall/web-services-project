@@ -20,13 +20,11 @@ function handleCreatefighters(Request $request, Response $response, array $args)
         $fighterName = $fighter_info["name"];
         $fightrecord = $fighter_info["records"];
         $fightweight = $fighter_info["weightClass"];
-        $fightcountry = $fighter_info["country"];
         $new_fighters_record = array(
             "fighterId" => $fighter_id,
             "name" => $fighterName,
             "records" => $fightrecord,
             "weightClass" => $fightweight,
-            "country" => $fightcountry
         );
         $fighter_model->createfighter($new_fighters_record);
         /*$fighter_model->updatefighter(

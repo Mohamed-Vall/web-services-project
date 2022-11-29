@@ -25,6 +25,7 @@ class FighterModel extends BaseModel {
     }
 
     public function createFighter($data) {
+        
         $data = $this->insert("fighters", $data);
         return $data;
     }
