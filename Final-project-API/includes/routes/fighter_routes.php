@@ -72,20 +72,30 @@ function handleGetAllFighters(Request $request, Response $response, array $args)
     return $response->withStatus($response_code);
 }
 
+function handleDeletefighterById(Request $request, Response $response, array $args) {
+     // Retreive the fighter if from the request's URI.
+    $fighter_id = $args["fighter_id"];
+    // TODO: use the fighter model to delete 
+    $fighter_model = new FighterModel();
+    $fighter_model->deletefighterById($fighter_id); 
+    $response->getBody()->write("Deleted ".$fighter_id);
+    return $response;
+}
+
 function handleGetFighterById(Request $request, Response $response, array $args) {
     $fighter_info = array();
     $response_data = array();
     $response_code = HTTP_OK;
     $fighter_model = new FighterModel();
 
-    // Retreive the fighter if from the request's URI.
+    // Retreive the artist if from the request's URI.
     $fighter_id = $args["fighter_id"];
     if (isset($fighter_id)) {
-        // Fetch the info about the specified fighter.
-        $fighter_info = $fighter_model->getfighterById($fighter_id);
+        // Fetch the info about the specified artist.
+        $fighter_info = $fighter_model->getFightersById($fighter_id);
         if (!$fighter_info) {
             // No matches found?
-            $response_data = makeCustomJSONError("resourceNotFound", "No matching record was found for the specified fighter.");
+            $response_data = makeCustomJSONError("resourceNotFound", "No matching record was found for the specified artist.");
             $response->getBody()->write($response_data);
             return $response->withStatus(HTTP_NOT_FOUND);
         }
@@ -102,16 +112,6 @@ function handleGetFighterById(Request $request, Response $response, array $args)
     }
     $response->getBody()->write($response_data);
     return $response->withStatus($response_code);
-}
-
-function handleDeletefighterById(Request $request, Response $response, array $args) {
-     // Retreive the fighter if from the request's URI.
-    $fighter_id = $args["fighter_id"];
-    // TODO: use the fighter model to delete 
-    $fighter_model = new fighterModel();
-    $fighter_model->deletefighterById($fighter_id); 
-    $response->getBody()->write("Deleted ".$fighter_id);
-    return $response;
 }
 
 /*function handleUpdatefighters(Request $request, Response $response, array $args) {

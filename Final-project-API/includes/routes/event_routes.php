@@ -46,21 +46,17 @@ function handleGetEventsById(Request $request, Response $response, array $args) 
     $events_model = new EventModel();
 
     // Retreive the events if from the request's URI.
-    $liveId = $args["id"];
-    $fighterId = $args["fighterId"];
+    $liveId = $args["liveId"];
     if (isset($liveId)) {
         // Fetch the info about the specified result.
         $events_info = $events_model->getEventById($liveId);
-        if (isset($fighterId)){
-            $events_info = $events_model->getEventByFighterId($fighterId);
-            if (!$events_info){
+        if (!$events_info){
                 // No matches found?
                 $response_data = makeCustomJSONError("resourceNotFound", "No matching record was found for the specified event.");
                 $response->getBody()->write($response_data);
                 return $response->withStatus(HTTP_NOT_FOUND);
             }
         }
-    }
     // Handle serve-side content negotiation and produce the requested representation.    
     $requested_format = $request->getHeader('Accept');
     //--
@@ -75,35 +71,42 @@ function handleGetEventsById(Request $request, Response $response, array $args) 
     return $response->withStatus($response_code);
 }
 
-function handleDeleteEventsById(Request $request, Response $response, array $data){
+function handleGetEventsByFighterId(Request $request, Response $response, array $args) {
     $events_info = array();
     $response_data = array();
     $response_code = HTTP_OK;
     $events_model = new EventModel();
-    
-    $liveId = $args["liveId"];
-    if (isset($liveId)) {
+
+    // Retreive the events if from the request's URI.
+    $fighterId = $args["fighterId"];
+    if (isset($fighterId)) {
         // Fetch the info about the specified result.
-        $events_info = $events_model->getEventById($liveId);
-        if (!$events_info) {
-            // No matches found?
-            $response_data = makeCustomJSONError("resourceNotFound", "No matching record was found for the specified event.");
-            $response->getBody()->write($response_data);
-            return $response->withStatus(HTTP_NOT_FOUND);
+        $events_info = $events_model->getEventByFighterId($fighterId);
+        if (!$events_info){
+                // No matches found?
+                $response_data = makeCustomJSONError("resourceNotFound", "No matching record was found for the specified event.");
+                $response->getBody()->write($response_data);
+                return $response->withStatus(HTTP_NOT_FOUND);
+            }
         }
-    }
-    
     // Handle serve-side content negotiation and produce the requested representation.    
     $requested_format = $request->getHeader('Accept');
     //--
     //-- We verify the requested resource representation.    
     if ($requested_format[0] === APP_MEDIA_TYPE_JSON) {
-        $events_model->deleteEvent($liveId);
-        $response_data = "Deleted Fight events Succesfully";
+        $response_data = json_encode($events_info, JSON_INVALID_UTF8_SUBSTITUTE);
     } else {
         $response_data = json_encode(getErrorUnsupportedFormat());
         $response_code = HTTP_UNSUPPORTED_MEDIA_TYPE;
     }
     $response->getBody()->write($response_data);
     return $response->withStatus($response_code);
+}
+
+function handleDeleteEventsById(Request $request, Response $response, array $args){
+    $liveID = $args["liveId"];
+    $live_model = new EventModel();
+    $live_model->deleteEvent($liveID);
+    $response->getBody()->write("Deleted ".$liveID);
+    return $response;
 }

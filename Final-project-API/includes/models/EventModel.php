@@ -34,13 +34,13 @@ class EventModel extends BaseModel {
      */
     public function getEventById($live_id) {
         $sql = "SELECT * FROM events WHERE liveId = ?";
-        $data = $this->run($sql, [$live_id])->fetch();
+        $data = $this->rows($sql, [$live_id]);
         return $data;
     }
     
-    public function getEventByFigherId($live_id){
-        $sql = "SELECT * FROM events WHERE fighterId = ?";
-        $data = $this->run($sql, [$liveId])->fetch();
+    public function getEventByFighterId($live_id){
+        $sql = "SELECT * FROM events WHERE fightId = ?";
+        $data = $this->rows($sql, [$live_id]);
         return $data;
     }
     
@@ -50,12 +50,11 @@ class EventModel extends BaseModel {
         $data = $this->run($sql, [":fighterName" => $fighterName . "%"])->fetch();
         return $data;
     }
-
     
     public function deleteEvent($liveId){
         $sql = "DELETE FROM events WHERE liveId = ?";
-        $data = $this->run($sql, [$liveId])->fetch();
-        return $data;
+        $data = $this->run($sql, [$liveId]);
+        return $data->rowCount();
     }
 
 }

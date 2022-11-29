@@ -25,7 +25,9 @@ $app->setBasePath("/web-services-project/Final-Project-API"); #change this to su
 
 //-- Step 5) Include the files containing the definitions of the callbacks.
 require_once './includes/routes/fighter_routes.php';
-//require_once '.includes/routes/customers_routes.php';
+require_once './includes/routes/event_routes.php';
+require_once './includes/routes/finalresult_routes.php';
+require_once './includes/routes/fights_routes.php';
 
 //-- Step 6)
 // TODO: And here we define app routes.
@@ -33,16 +35,21 @@ require_once './includes/routes/fighter_routes.php';
 $app->delete("/fighters/delete/{fighter_id}", "handleDeleteFighterById");
 $app->post("/fighters/create", "handleCreateFighters");
 $app->get("/fighters", "handleGetAllFighters");
+$app->get("/fighters/{fighter_id}", "handleGetFighterById");
 
 
-$app->delete("/results/delete/{id}", "handleDeleteResultsById");
+$app->delete("/results/delete/{resultID}", "handleDeleteResultsById");
 $app->get("/results", "handleGetAllResults");
-$app->get("/results/{id}", "handleGetResultsById");
+$app->get("/results/{resultID}", "handleGetResultsById");
 
-$app->delete("/events/delete/{id}", "handleDeleteEventsById");
-$app->get("/events/{name}", "handleGetAllResults");
-$app->get("/events/{id}", "handleGetEventsById");
-$app->get("/events/fighter/{fighterId}", "handleGetEventsById");
+$app->delete("/events/delete/{liveId}", "handleDeleteEventsById");
+$app->get("/events", "handleGetAllResults");
+$app->get("/events/{liveId}", "handleGetEventsById");
+$app->get("/events/fight/{fighterId}", "handleGetEventsByFighterId");
+
+$app->get("/fights/{fightsid}", "handleGetfightById");
+$app->post("/fights/create", "handleCreatefight");
+$app->delete("/fights/delete/{fightsid}", "handleDeleteFightById");
 
 // Run the app.
 $app->run();

@@ -12,21 +12,22 @@ function handleCreatefight(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
 
     $data_string = "";
-    $fight_model = new FitghtsModel();
+    $fight_model = new FightsModel();
     foreach($data as $key => $fights_data) {                    
         
-        $fightid = $fights_data["fightid"];
-        $fighter1Name = $fights_data["fighter1"];
-        $fighter2Name = $fights_data["fighter2"];
+        $fightid = $fights_data["fightID"];
+        $fighter1Name = $fights_data["fighter1ID"];
+        $fighter2Name = $fights_data["fighter2ID"];
         $odds = $fights_data["odds"];
         $schedule = $fights_data["schedule"];
         $fight_array = array(
-            "fightid" => $fightid,
-            "fighter1Name" => $fighter1Name,
-            "fighter2Name" => $fighter2Name,
+            "fightID" => $fightid,
+            "fighter1ID" => $fighter1Name,
+            "fighter2ID" => $fighter2Name,
             "odds" => $odds,
-            "schedule" => $schedule,
-        );;
+            "schedule" => $schedule
+        );
+        $fight_model->createFight($fight_array);
 
     }
     $response->getBody()->write("fights created!");
@@ -66,11 +67,11 @@ function handleGetfightById(Request $request, Response $response, array $args) {
     $fights_data = array();
     $response_data = array();
     $response_code = HTTP_OK;
-    $fight_model = new FightsModel();
+    $fights_model = new FightsModel();
 
-    $fight_id = $args["fightid"];
+    $fight_id = $args["fightsid"];
     if (isset($fight_id)) {
-        $fights_data = $fights_data->getFightById($fightid);
+        $fights_data = $fights_model->getFightById($fight_id);
         if (!$fights_data) {
             // No matches found?
             $response_data = makeCustomJSONError("resourceNotFound", "This fight does not exist.");
@@ -93,12 +94,11 @@ function handleGetfightById(Request $request, Response $response, array $args) {
 }
 
 function handleDeletefightById(Request $request, Response $response, array $args) {
-    $fight_id = $args["fightid"];
-    $fight_model = new FightsModel();
-    $fights_model->$fightid = $fight_id;
-    $fights_model->delete(); 
-    $response->getBody()->write("Deleted ".$fight_id);
-    return $response;
+   $fight_id = $args["fightsid"];
+   $fight_model = new FightsModel();
+   $fight_model->deleteFightById($fight_id); 
+   $response->getBody()->write("Deleted ".$fight_id);
+   return $response;
 }
 
 function handleGetfightByOdds(Request $request, Response $response, array $args) {
