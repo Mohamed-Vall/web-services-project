@@ -5,7 +5,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use GuzzleHttp\Client;
 
-require __DIR__ . '/vendor/autoload.php';
 require_once './includes/app_constants.php';
 require_once './includes/helpers/helper_functions.php';
 
@@ -14,10 +13,11 @@ require_once './includes/models/EventModel.php';
 require_once './includes/models/FightsModel.php';
 require_once './includes/models/FinalResultsModel.php';
 
-$client = new GuzzleHttp\Client();
+//$client = new GuzzleHttp\Client(['verify' => false ]);
 
-require_once './helpers/WebServiceInvoker.php';
+require_once './includes/helpers/WebServiceInvoker.php';
 require_once './controllers/fightersController.php';
+require __DIR__ . '/vendor/autoload.php';
 
 
 //--Step 1) Instantiate App.
@@ -91,10 +91,10 @@ function upcomingCompositeResource() {
     $fighterEvent = Array();
     // Get books data from the Ice and Fire API.
     $externalEvent = new FightersController();
-    $external = $externalEvent->getUpcomingInfo();
+    $external = $externalEvent->getExternalInfo();
     // Get the list of artists.    
-    $event_model = new EventModel();        
-    $events = $event_model->getAll();
+    $event_model = new FightsModel();        
+    $events = $event_model->getAllFights();
 
     // Combine the data sets.
     $fighterEvent["external"] = $external;
@@ -107,7 +107,7 @@ function finishedCompositeResource() {
     $fighterEvent = Array();
     // Get books data from the Ice and Fire API.
     $externalEvent = new FightersController();
-    $external = $externalEvent->getFinishedInfo();//$id);
+    $external = $externalEvent->getExternalInfo();//$id);
     // Get the list of artists.    
     $event_model = new EventModel();        
     $events = $event_model->getAll();
