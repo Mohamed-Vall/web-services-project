@@ -4,7 +4,7 @@ RewriteEngine On
 
 
 #change this to subfolder if I need to change e.i. /.../web-services-project/Final-Project-API
-RewriteBase /web-services-project/Final-Project-API
+RewriteBase /fighter-api
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [QSA,L]

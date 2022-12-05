@@ -6,6 +6,7 @@ use Slim\Factory\AppFactory;
 
 require_once __DIR__ . './../models/BaseModel.php';
 require_once __DIR__ . './../models/FightsModel.php';
+require_once __DIR__ . './../models/WSLoggingModel.php';
 
 function handleCreatefight(Request $request, Response $response, array $args) {
     
@@ -39,7 +40,12 @@ function handleGetFights(Request $request, Response $response, array $args) {
     $response_data = array();
     $response_code = HTTP_OK;
     $fight_model = new FightsModel();
-
+    //----------------------------------------    
+    $logging_model = new WSLoggingModel();
+    //-- Get the decode JWT payload section. 
+    $decoded_jwt = $request->getAttribute('decoded_token_data');
+    $logging_model->logUserAction($decoded_jwt, "getListOfFights");
+    //--------------------------------------
     // Retreive the query string parameter from the request's URI.
     $filter_params = $request->getQueryParams();
     if (isset($filter_params["fighter1"])) {

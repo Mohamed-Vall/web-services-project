@@ -7,6 +7,7 @@ use Slim\Factory\AppFactory;
 
 require_once __DIR__ . './../models/BaseModel.php';
 require_once __DIR__ . './../models/FinalResultsModel.php';
+require_once __DIR__ . './../models/WSLoggingModel.php';
 
 // Callback for HTTP GET /finalresults
 //-- Supported filtering operation: by results id.
@@ -15,7 +16,12 @@ function handleGetAllResults(Request $request, Response $response, array $args) 
     $response_data = array();
     $response_code = HTTP_OK;
     $result_model = new FinalResultsModel();
-
+    //----------------------------------------    
+    $logging_model = new WSLoggingModel();
+    //-- Get the decode JWT payload section. 
+    $decoded_jwt = $request->getAttribute('decoded_token_data');
+    $logging_model->logUserAction($decoded_jwt, "getListOfResults");
+    //--------------------------------------
     // Retreive the query string parameter from the request's URI.
     $filter_params = $request->getQueryParams();
     if (isset($filter_params["id"])) {
