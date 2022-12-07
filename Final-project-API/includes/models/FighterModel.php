@@ -14,7 +14,7 @@ class FighterModel extends BaseModel {
 
     public function getAllFighters() {
         $sql = "SELECT * FROM fighters";
-        $data = $this->rows($sql);
+        $data = $this->paginate($sql);
         return $data;
     }
 
@@ -43,7 +43,7 @@ class FighterModel extends BaseModel {
 
     public function getFightersById($fighter_id) {
         $sql = "SELECT * FROM fighters WHERE fighterId = ?";
-        $data = $this->rows($sql, [$fighter_id]);
+        $data = $this->paginate($sql, [$fighter_id]);
         return $data;
       }
 }

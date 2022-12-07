@@ -23,7 +23,7 @@ class EventModel extends BaseModel {
      */
     public function getAll() {
         $sql = "SELECT * FROM events";
-        $data = $this->rows($sql);
+        $data = $this->paginate($sql);
         return $data;
     }
 
@@ -34,13 +34,13 @@ class EventModel extends BaseModel {
      */
     public function getEventById($live_id) {
         $sql = "SELECT * FROM events WHERE liveId = ?";
-        $data = $this->rows($sql, [$live_id]);
+        $data = $this->paginate($sql, [$live_id]);
         return $data;
     }
     
     public function getEventByFighterId($live_id){
         $sql = "SELECT * FROM events WHERE fightId = ?";
-        $data = $this->rows($sql, [$live_id]);
+        $data = $this->paginate($sql, [$live_id]);
         return $data;
     }
     

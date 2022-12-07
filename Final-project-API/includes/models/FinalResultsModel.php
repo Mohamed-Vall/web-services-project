@@ -24,7 +24,7 @@ class FinalResultsModel extends BaseModel {
      */
     public function getAll() {
         $sql = "SELECT * FROM finalresults";
-        $data = $this->rows($sql);
+        $data = $this->paginate($sql);
         return $data;
     }
 
