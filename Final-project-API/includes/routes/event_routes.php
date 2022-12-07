@@ -8,14 +8,20 @@ use Slim\Factory\AppFactory;
 require_once __DIR__ . './../models/BaseModel.php';
 require_once __DIR__ . './../models/EventModel.php';
 require_once __DIR__ . './../models/WSLoggingModel.php';
+require_once __DIR__ . './../helpers/Paginator.php';
 
 // Callback for HTTP GET /events
 //-- Supported filtering operation: by events id.
 function handleGetAllEvents(Request $request, Response $response, array $args) {
+    $input_page_number = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT);
+    $input_per_page = filter_input(INPUT_GET, "per_page", FILTER_VALIDATE_INT);
+    
     $events = array();
     $response_data = array();
     $response_code = HTTP_OK;
     $events_model = new EventModel();
+
+    $events_model->setPaginationOptions($input_page_number, $input_per_page);
     //----------------------------------------    
     $logging_model = new WSLoggingModel();
     //-- Get the decode JWT payload section. 

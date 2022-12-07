@@ -60,13 +60,13 @@ class FightsModel extends BaseModel {
  */
   public function getFightById($fight_id) {
     $sql = "SELECT * FROM fights WHERE fightID = ?";
-    $data = $this->rows($sql, [$fight_id]);
+    $data = $this->paginate($sql, [$fight_id]);
     return $data;
   }
 
   public function getAllFights() {
     $sql = "SELECT * FROM fights";
-    $data = $this->rows($sql);
+    $data = $this->paginate($sql);
     return $data;
 }
 

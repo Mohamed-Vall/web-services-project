@@ -8,14 +8,20 @@ use Slim\Factory\AppFactory;
 require_once __DIR__ . './../models/BaseModel.php';
 require_once __DIR__ . './../models/FinalResultsModel.php';
 require_once __DIR__ . './../models/WSLoggingModel.php';
+require_once __DIR__ . './../helpers/Paginator.php';
 
 // Callback for HTTP GET /finalresults
 //-- Supported filtering operation: by results id.
 function handleGetAllResults(Request $request, Response $response, array $args) {
+    $input_page_number = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT);
+    $input_per_page = filter_input(INPUT_GET, "per_page", FILTER_VALIDATE_INT);
+        
     $results = array();
     $response_data = array();
     $response_code = HTTP_OK;
     $result_model = new FinalResultsModel();
+
+    $result_model->setPaginationOptions($input_page_number, $input_per_page);
     //----------------------------------------    
     $logging_model = new WSLoggingModel();
     //-- Get the decode JWT payload section. 

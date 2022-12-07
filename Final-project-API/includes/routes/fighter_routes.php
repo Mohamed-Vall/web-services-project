@@ -8,6 +8,7 @@ use Slim\Factory\AppFactory;
 require_once __DIR__ . './../models/BaseModel.php';
 require_once __DIR__ . './../models/fighterModel.php';
 require_once __DIR__ . './../models/WSLoggingModel.php';
+require_once __DIR__ . './../helpers/Paginator.php';
 
 function handleCreatefighters(Request $request, Response $response, array $args) {
     
@@ -43,10 +44,15 @@ function handleCreatefighters(Request $request, Response $response, array $args)
 // Callback for HTTP GET /fighters
 //-- Supported filtering operation: by fighter name.
 function handleGetAllFighters(Request $request, Response $response, array $args) {
+    $input_page_number = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT);
+    $input_per_page = filter_input(INPUT_GET, "per_page", FILTER_VALIDATE_INT);
+
     $fighters = array();
     $response_data = array();
     $response_code = HTTP_OK;
     $fighter_model = new FighterModel();
+
+    $fighter_model->setPaginationOptions($input_page_number, $input_per_page);
     //----------------------------------------    
     $logging_model = new WSLoggingModel();
     //-- Get the decode JWT payload section. 
