@@ -11,9 +11,9 @@ class FightersController extends WebServiceInvoker {
     }
 
     /**
-     * Fetches and parses a list of books from the Ice and Fire API.
+     * Fetches and parses a list of fights from the API.
      * 
-     * @return array containing some information about books. 
+     * @return array containing some information about fighters. 
      */
     function getExternalInfo() {   //Use Fights Table
         $events = Array();
@@ -21,13 +21,11 @@ class FightersController extends WebServiceInvoker {
         $eventsData = $this->invoke($resource_uri);
 
         if (!empty($eventsData)) {
-            // Parse the fetched list of books.   
+            // Parse the fetched list of fighters.   
             $eventsData = json_decode($eventsData, true);
-            //var_dump($booksData);exit;
 
             $index = 0;
-            // Parse the list of books and retreive some  
-            // of the contained information.
+            // Parse the list of fighters and retreive some of the contained information.
             foreach ($eventsData as $key => $event) {
                 $events[$index]["FighterId"] = $event["FighterId"];
                 $events[$index]["FirstName"] = $event["FirstName"];
@@ -50,34 +48,9 @@ class FightersController extends WebServiceInvoker {
                 $events[$index]["TitleLosses"] = $event["TitleLosses"];
                 $events[$index]["TitleDraws"] = $event["TitleDraws"];
                 $events[$index]["CareerStats"] = $event["CareerStats"];
-                //
                 $index++;
             }
         }
         return $events;
-        /*$books = Array();
-        $resource_uri = "https://www.anapioficeandfire.com/api/books";
-        $booksData = $this->invoke($resource_uri);
-
-        if (!empty($booksData)) {
-            // Parse the fetched list of books.   
-            $booksData = json_decode($booksData, true);
-            //var_dump($booksData);exit;
-
-            $index = 0;
-            // Parse the list of books and retreive some  
-            // of the contained information.
-            foreach ($booksData as $key => $book) {
-                $books[$index]["name"] = $book["name"];
-                $books[$index]["isbn"] = $book["isbn"];
-                $books[$index]["authors"] = $book["authors"];
-                $books[$index]["mediaType"] = $book["mediaType"];
-                $books[$index]["country"] = $book["country"];
-                $books[$index]["released"] = $book["released"];
-                //
-                $index++;
-            }
-        }
-        return $books;*///The Code for it works just need a proper API
     }
 }
