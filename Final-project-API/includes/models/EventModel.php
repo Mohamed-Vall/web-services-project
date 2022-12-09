@@ -34,20 +34,19 @@ class EventModel extends BaseModel {
      */
     public function getEventById($live_id) {
         $sql = "SELECT * FROM events WHERE liveId = ?";
-        $data = $this->paginate($sql, [$live_id]);
+        $data = $this->paginate($sql, [":liveId" => "%" . $live_id . "%"]);
         return $data;
     }
     
-    public function getEventByFighterId($live_id){
+    public function getEventByFighterId($fight_id){
         $sql = "SELECT * FROM events WHERE fightId = ?";
-        $data = $this->paginate($sql, [$live_id]);
+        $data = $this->paginate($sql, [":fightId" => "%" . $fight_id . "%"]);
         return $data;
     }
     
     public function getEventByFighterName($fighterName){
-        $sql = "SELECT * FROM events WHERE fighterId in 
-                (SELECT fighterId FROM fighterId WHERE name LIKE :fighterName)";
-        $data = $this->run($sql, [":fighterName" => $fighterName . "%"])->fetch();
+        $sql = "SELECT * FROM events WHERE fighterId in (SELECT fighterId FROM fighterId WHERE name LIKE :fighterName)";
+        $data = $this->paginate($sql, [":fighterId" => "%" . $fighterName . "%"]);
         return $data;
     }
     
