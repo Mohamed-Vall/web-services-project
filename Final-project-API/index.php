@@ -23,8 +23,8 @@ require __DIR__ . '/vendor/autoload.php';
 
 //--Step 1) Instantiate App.
 $app = AppFactory::create();
-upcomingCompositeResource();
-finishedCompositeResource();
+//upcomingCompositeResource();
+//finishedCompositeResource();
 
 $app->addBodyParsingMiddleware();
 
@@ -104,6 +104,10 @@ $app->get("/fights/{fightsid}", "handleGetfightById");
 $app->post("/fights/create", "handleCreatefight");
 $app->delete("/fights/delete/{fightsid}", "handleDeleteFightById");
 
+//For comp resources
+$app->get("/upcomingcomp", upcomingCompositeResource());
+$app->get("/finishedcomp", finishedCompositeResource());
+
 $app->post("/token", "handleGetToken");
 $app->post("/account", "handleCreateUserAccount");
 
@@ -122,8 +126,8 @@ function upcomingCompositeResource() {
     $events = $event_model->getAllFights();
 
     // Combine the data sets.
-    $fighterEvent["external"] = $external;
     $fighterEvent["internal"] = $events;
+    $fighterEvent["external"] = $external;
     $jsonData = json_encode($fighterEvent, JSON_INVALID_UTF8_SUBSTITUTE);
     echo $jsonData;
 }
@@ -138,8 +142,8 @@ function finishedCompositeResource() {
     $events = $event_model->getAll();
 
     // Combine the data sets.
-    $fighterEvent["external"] = $external;
     $fighterEvent["internal"] = $events;
+    $fighterEvent["external"] = $external;
     $jsonData = json_encode($fighterEvent, JSON_INVALID_UTF8_SUBSTITUTE);
     echo $jsonData;
 }
