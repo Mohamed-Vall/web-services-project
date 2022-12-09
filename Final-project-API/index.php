@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 
 require_once './includes/app_constants.php';
 require_once './includes/helpers/helper_functions.php';
+require_once './includes/helpers/JWTManager.php';
 
 require_once './includes/models/BaseModel.php';
 require_once './includes/models/EventModel.php';
@@ -42,7 +43,7 @@ require_once './includes/routes/fighter_routes.php';
 require_once './includes/routes/event_routes.php';
 require_once './includes/routes/finalresult_routes.php';
 require_once './includes/routes/fights_routes.php';
-
+require_once './includes/routes/token_routes.php';
 //-- Step 6)
 // TODO: And here we define app routes.
 
@@ -64,6 +65,26 @@ foreach ($fighters as $fighter) {
     //echo $fighter["FirstName"] . " " . $fighter["LastName"] . "<br>";
 }
 
+$jwt_secret = JWTManager::getSecretKey();
+$api_base_path = "/web-services-project/Final-project-API";
+$app->add(new Tuupola\Middleware\JwtAuthentication([
+            'secret' => $jwt_secret,
+            'algorithm' => 'HS256',
+            'secure' => false, // only for localhost for prod and test env set true            
+            "path" => $api_base_path, // the base path of the API
+            "attribute" => "decoded_token_data",
+            "ignore" => ["$api_base_path/token", "$api_base_path/account"],
+            "error" => function ($response, $arguments) {
+                $data["status"] = "error";
+                $data["message"] = $arguments["message"];
+                $response->getBody()->write(
+                        json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+                );
+                return $response->withHeader("Content-Type", "application/json;charset=utf-8");
+            }
+        ]));
+
+
 $app->delete("/fighters/delete/{fighter_id}", "handleDeleteFighterById");
 $app->post("/fighters/create", "handleCreateFighters");
 $app->get("/fighters", "handleGetAllFighters");
@@ -82,6 +103,9 @@ $app->get("/fights", "handleGetFights");
 $app->get("/fights/{fightsid}", "handleGetfightById");
 $app->post("/fights/create", "handleCreatefight");
 $app->delete("/fights/delete/{fightsid}", "handleDeleteFightById");
+
+$app->post("/token", "handleGetToken");
+$app->post("/account", "handleCreateUserAccount");
 
 $app->get('/', ['verify' => true]);
 
