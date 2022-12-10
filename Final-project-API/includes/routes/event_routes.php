@@ -112,6 +112,7 @@ function handleGetEventsByFighterId(Request $request, Response $response, array 
         $response_code = HTTP_UNSUPPORTED_MEDIA_TYPE;
     }
     $response->getBody()->write($response_data);
+    $response_data = makeCustomJSONError("Sucess", "Ok", $response_data);
     return $response->withStatus($response_code);
 }
 
@@ -120,5 +121,18 @@ function handleDeleteEventsById(Request $request, Response $response, array $arg
     $live_model = new EventModel();
     $live_model->deleteEvent($liveID);
     $response->getBody()->write("Deleted ".$liveID);
-    return $response;
+    $response_data = array();
+    $response_code = HTTP_OK;
+    $data = $request->getParsedBody();
+    $requested_format = $request->getHeader('Accept');
+    if ($requested_format[0] === APP_MEDIA_TYPE_JSON) {
+        $response_data = json_encode($data, JSON_INVALID_UTF8_SUBSTITUTE);
+        $response_data = makeCustomJSONError("Success", "event has been deleted", $response_data);
+    } else {
+        $response_data = json_encode(getErrorUnsupportedFormat());
+        $response_code = HTTP_UNSUPPORTED_MEDIA_TYPE;
+    }
+    $response->getBody()->write($response_data);
+    return $response->withStatus($response_code);        
+
 }
