@@ -122,7 +122,7 @@ function upcomingCompositeResource() {
     $externalEvent = new FightersController();
     $external = $externalEvent->getExternalInfo();
     // Get the list of artists.    
-    $event_model = new FightsModel();        
+    $event_model = new FightsModel();
     $events = $event_model->getAllFights();
 
     // Combine the data sets.

@@ -43,21 +43,15 @@ class FightsModel extends BaseModel {
   function __construct()
   {
     parent::__construct();
-    //$this->connectionManager = new ConnectionManager();
-    //$this->dbConnection = $this->connectionManager->getConnection();
   }
 
-  /*public function getWhereLikeFights($artistName) {
-    $sql = "SELECT * FROM artist WHERE Name LIKE :name";
-    $data = $this->run($sql, [":name" => $artistName . "%"])->fetchAll();
-    return $data;
-  }*/
 
 /**
- * Retrieve an artist by its id.
- * @param int $artist_id the id of the artist.
- * @return array an array containing information about a given artist.
+ * Retrieve an fight by its id.
+ * @param int $fight_id the id of the fight.
+ * @return array an array containing information about a given fights.
  */
+
   public function getFightById($fight_id) {
     $sql = "SELECT * FROM fights WHERE fightID = ?";
     $data = $this->paginate($sql, [$fight_id]);
@@ -66,7 +60,7 @@ class FightsModel extends BaseModel {
 
   public function getAllFights() {
     $sql = "SELECT * FROM fights";
-    $data = $this->paginate($sql);
+    $data = $this->rows($sql);
     return $data;
 }
 
