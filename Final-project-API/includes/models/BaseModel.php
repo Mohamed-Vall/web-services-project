@@ -5,6 +5,7 @@
  * This class can be extended for further customization.
  */
 require_once __DIR__ . './../helpers/Paginator.php';
+
 class BaseModel {
 
     /**
