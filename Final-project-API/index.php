@@ -34,8 +34,8 @@ $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 //-- Step 4)
 // TODO: change the name of the sub directory here. You also need to change it in .htaccess
 
-//$app->setBasePath("/web-services-project/Final-Project-API"); #change this to subfolder if I need to change e.i. /.../music-api (has to match .htaccess)
-$app->setBasePath("/fighter-api"); #change this to subfolder if I need to change e.i. /.../music-api (has to match .htaccess)
+//$app->setBasePath("/web-services-project/Final-project-API/Final-Project-API"); #change this to subfolder if I need to change e.i. /.../music-api (has to match .htaccess)
+$app->setBasePath("/web-services-project/Final-project-API"); #change this to subfolder if I need to change e.i. /.../music-api (has to match .htaccess)
 $uri_api = "https://api.sportsdata.io/v3/mma/scores/json/Fighters?key=a541ac55a76a48d1add34c4639da10ec";
 //-- Step 5) Include the files containing the definitions of the callbacks.
 require_once './includes/routes/fighter_routes.php';
@@ -94,7 +94,7 @@ function upcomingCompositeResource() {
     $externalEvent = new FightersController();
     $external = $externalEvent->getExternalInfo();
     // Get the list of artists.    
-    $event_model = new FightsModel();        
+    $event_model = new FightsModel();
     $events = $event_model->getAllFights();
 
     // Combine the data sets.
