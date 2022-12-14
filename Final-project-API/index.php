@@ -25,8 +25,6 @@ define('APP_ENV_CONFIG', 'config.env');
 
 //--Step 1) Instantiate App.
 $app = AppFactory::create();
-upcomingCompositeResource();
-finishedCompositeResource();
 
 $app->addBodyParsingMiddleware();
 
@@ -106,6 +104,9 @@ $app->post("/fights/create", "handleCreatefight");
 $app->delete("/fights/delete/{fightsid}", "handleDeleteFightById");
 
 $app->get('/', ['verify' => true]);
+
+$app->get("/upcoming", upcomingCompositeResource());
+$app->get("/finished", finishedCompositeResource());
 
 // Run the app.
 $app->run();
